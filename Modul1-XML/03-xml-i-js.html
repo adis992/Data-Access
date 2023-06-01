@@ -5,11 +5,50 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>XML and JavaScript</title>
 </head>
 
 <body>
+    <script>
+/*
+        //primjer prebacivanja xml-a u dom objekat
+        var myXmlString = '<root><message>Hello World!</message></root>';
+        //PARSIRANJE JE POJAAM ZA CITANJE TEXTA ili izvlacenja nekih podataka
+        //za parsiranje xml dokumenta koristi se jedan poseban API-DOM struktura i kreiramo ga na sljedeci nacin 
+        var domParser = new DOMParser();  //dom parser moze parsirati XML i SVG
+        var xmlDom = domParser.parseFromString(myXmlString, "text/xml");
+        //na ovaj nacin ce sve raditi ako je xml uredan, ako postoji greska pisat ce nodevalue error eh da to ispisemo moramo prvo provjeriti je li xml tacan ako nije da izbaci error i pisemo
+        if (xmlDom.getElementsByTagName("parsererror").length !== 0) {
+            console.log("Xml dokument nije validan")
+        } else {
+            var messageElement = xmlDom.getElementsByTagName("message")[0];
+            var messageText = messageElement.childNodes[0];
+            console.log(messageText.nodeValue);
+        }
+*/
 
+
+
+
+         //primjer prebacivanja dom objekta u xml doc.
+        //za parsiranje dom objekta u xml koristi se poseban api- XMLSerializer API-a
+
+        var XMLDocument = document.implementation.createDocument(null, "root");
+
+        var ingredient1Element = xmlDocument.createElement("ingredient");   //kreiramo za root jedan ingradient
+        var ingredient1ElementText = xmlDocument.createTextNode ("bread slice");  //ovdje kreiramo text odnosno sadrzaj sa ingradient ali i dalje nije od ingradienta, moramo ga pozvati sa appendchild
+        ingredient1Element.appendChild(ingredient1ElementText);  //dodavanje vrijednosti bread slice ingradientu kojeg smo prije kreirali
+        //iako smo sve rijesili sada treba sve dodati XMLDocument-u a to cemo uraditi na sljedeci nacin
+        xmlDocument.documentElement.appendChild(ingredient1Element);
+
+
+
+        var XMLSerializer = new XMLSerializer();
+        var xmlString = XMLSerializer.serializeToString(XMLDocument);
+
+
+
+    </script>
 </body>
 
 </html>

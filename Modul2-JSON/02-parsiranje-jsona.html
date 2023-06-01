@@ -9,7 +9,40 @@
 </head>
 
 <body>
+    <script>
+        //primjer gdje mi kreiramo json fajl u js-u i ispisujemo
+        var json = '{"name": "Ben", "age": "44"}';
+        var obj = JSON.parse(json);
+        console.log(obj.name);
 
+        //primjer 2 s ispisivanjem jsona u html fajlu odnosno stranici
+
+        var json1 = '{"countries":[{"countryCode":"sr","name":"Serbia", "capital": "Belgrade", "description": "Serbia is....."}, {"countryCode": "fr", "name": "France","capital": "Paris", "description": "France is....."}]}';
+
+        var data = JSON.parse(json1);
+        for (let i = 0; i < data.countries.length; i++) {
+            document.body.innerHTML +=
+                '<h2>' + data.countries[i].name + '</h2>'
+            document.body.innerHTML +=
+                '<p>Capital: ' + data.countries[i].capital + '</p>'
+            document.body.innerHTML +=
+                '<p>Description: ' + data.countries[i].description + '</p>'
+        }
+
+
+
+        //primjer 3    ovdje smodateTimeCreated koji je u stringu broj tj unix vrijeme podesili s jsonom da kljuc dateTimeCreated kreira new Date i vrati povratu vrijednost , ovo provjerimo debagingom u sources u dev cons.
+        var json2 = '[{"username":"user1","password":"gf^^$%bb%4","dateTimeCreated":"1587290213334"},{"username":"user2","password":"*(&%$$fff33ff","dateTimeCreated":"1382290314543"}]';
+        var data = JSON.parse(json2, (key, value) => {
+            if (key === "dateTimeCreated") {
+                value = new Date(parseInt(value));
+            }
+            return value;
+        });
+        console.log(data);
+
+
+    </script>
 </body>
 
 </html>

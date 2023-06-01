@@ -1,0 +1,7 @@
+<!--ovo su validaciona pravila xml dokumenta-->
+<!ELEMENT root (country)*>  <!--u dtd fajlu znak * oznacava da se moze pojaviti 1 ili vise puta-->
+<!ELEMENT country (name, capital, description)>  <!--u dtd fajlu name capital i desc. mogu se pojaviti samo jedanput jer nema druge oznake-->
+<!ATTLIST country countryCode CDATA #IMPLIED >  <!--na ovaj nacin se dodaje atribut elem, countryCode je naziv atributa, cdata je tip atributa , a IMPLIED je pravilo koje se odnosi na vrijednost atributa -->
+<!ELEMENT name (#PCDATA)> <!-- PCDATA, što je skraćenica za parsed character data, moze da sadrzi bilo koji textualni sadrzaj koji xml parser moze da cita-->
+<!ELEMENT capital (#PCDATA)> <!---->
+<!ELEMENT description (#PCDATA)> <!---->

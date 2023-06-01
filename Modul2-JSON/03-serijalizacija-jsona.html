@@ -9,7 +9,109 @@
 </head>
 
 <body>
+    <script>
+        //Serijalizacija je u biti pretvaranje js objekata u JSON text sa metodom stringfy
+        var person = {};
+        person.id = 34;
+        person.firstName = "Ben";
+        person.lastName = "Lord";
+        person.address = {};
+        person.address.street = "Bos En Lommerweg 65";
+        person.address.zipCode = "1008 AG";
+        person.address.city = "Amsterdam";
+        person.adult = true;
 
+        var json = JSON.stringify(person);
+        console.log(json);
+
+
+        //primjer 2 serijalizacija plus replacer
+
+
+        var person = {};
+        person.id = 34;
+        person.firstName = "Ben";
+        person.lastName = "Lord";
+        person.address = {};
+        person.address.street = "Bos En Lommerweg 65";
+        person.address.zipCode = "1008 AG";
+        person.address.city = "Amsterdam";
+        person.adult = true;
+
+        function replacer(key, value) {
+            if (key === "id") {
+                return undefined;
+            } else if (key === "adult") {
+                return (value === true) ? "yes" : "no";
+            }
+            return value;
+        }
+
+        var json1 = JSON.stringify(person, replacer); //ovdje smo sa replacer funkcijom za vrijednos id vradili undefined kao da ga nema a za vrijednost adult ako je true biti ce yes
+        console.log(json1);
+
+
+        //primjer 3 sad cemo odabrati sta zelimo serijalizovati iz primjera 
+
+
+        var person = {};
+        person.id = 34;
+        person.firstName = "Ben";
+        person.lastName = "Lord";
+        person.address = {};
+        person.address.street = "Bos En Lommerweg 65";
+        person.address.zipCode = "1008 AG";
+        person.address.city = "Amsterdam";
+        person.adult = true;
+
+
+        var replacer1 = ["firstName", "lastName", "address", "street", "zipCode", "city", "adult"];
+        var json2 = JSON.stringify(person, replacer1);
+        console.log(json2);
+
+
+        //Primjer sa toJSON metodom
+
+        var person = {};
+        person.id = 34;
+        person.firstName = "Ben";
+        person.lastName = "Lord";
+        person.address = {};
+        person.address.street = "Bos En Lommerweg 65";
+        person.address.zipCode = "1008 AG";
+        person.address.city = "Amsterdam";
+        person.adult = true;
+
+        person.toJSON = function (name) {
+            return {
+                first_name : this.firstName,
+                last_name : this.lastName,
+            }
+        }
+
+        var json4 = JSON.stringify(person);
+        console.log(json4);
+
+
+
+        //primjer 5 sa trecim parametrom u stringify metodi moze biti broj uvlacenja do 10 max  ili tabulator da odvoji kljuc i vrijednost kljuca jedno od drugog tj tabom t-tabulator
+
+
+        var person = {};
+        person.id = 34;
+        person.firstName = "Ben";
+        person.lastName = "Lord";
+        person.address = {};
+        person.address.street = "Bos En Lommerweg 65";
+        person.address.zipCode = "1008 AG";
+        person.address.city = "Amsterdam";
+        person.adult = true;
+
+        var json5 = JSON.stringify(person, null, "\t");
+        console.log(json5);
+
+
+    </script>
 </body>
 
 </html>

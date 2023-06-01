@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>  <!--encoding je svkako
+po defaultu isti moze i bez pisanja i on cita i parsira i lčććšč-->
+<?xml-stylesheet type="text/css" href="01-recipe.css"?>
+<root  xmlns="http://www.my-site.com/cooking" xmlns:b="http://www.my-site.com/beauty"  >  <!--link uvijek ide ovdje a moze i dolje u recipe b recimo-->
+    <recipe> <!--korijen
+        elementa i moze biti samo 1 ako hocemo 2 stavimo sve u root sintaxni elem-->
+        <title> Grilled Cheese Sandwich </title>  <!--naslov-->
+        <ingredients>
+            <ingredient qty="2">bread slice</ingredient>
+            <ingredient>chese slice</ingredient>
+            <ingredient qty="2">margarine pat</ingredient>
+        </ingredients>
+    </recipe>
+   <b:recipe >
+        <b:title>Kombucha Skin Cream</b:title>
+        <b:ingredients>
+            <b:ingredient qty="15g">beeswax</b:ingredient>
+            <b:ingredient qty="100ml">olive oil</b:ingredient>
+            <b:ingredient qty="1tbsp">wheat germ</b:ingredient>
+            <b:ingredient qty="10ml">calendula oil</b:ingredient>
+            <b:ingredient qty="2tsp">kombucha tea</b:ingredient>
+            <b:ingredient qty="1ml">lavender essential oil</b:ingredient>
+        </b:ingredients>
+    </b:recipe>
+</root>

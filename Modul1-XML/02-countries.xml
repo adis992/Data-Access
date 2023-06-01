@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="02-country.xsd">
+    <!--  primjer 1
+<!DOCTYPE root SYSTEM "02-country.dtd">
+
+    <country countryCode="sr">
+        <name>Serbia</name>
+        <capital>Belgrade</capital>
+        <description>Serbia is.....</description>
+    </country>
+    <country countryCode="fr">
+        <name>France</name>
+        <capital>Paris</capital>
+        <description>France is.....</description>
+    </country>
+</root>
+-->
+
+    <!--moderniji nacin primjer 2-->
+    <country countryCode="sr">
+        <name>Serbia</name>
+        <capital>Belgrade</capital>
+        <description>Serbia is.....</description>
+    </country>
+    <country countryCode="fr">
+        <name>France</name>
+        <capital>Paris</capital>
+        <description>France is.....</description>
+    </country>
+</root>

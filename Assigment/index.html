@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kviz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: #696767;
+        }
+
+        #quiz {
+            width: 40%;
+            padding: 20px;
+            background-color: #a8a4a4;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        #buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 40%;
+            margin: 20px auto;
+            
+        }
+
+        #buttons button {
+            width: 45%;
+            padding: 10px;
+            font-size: 1.2em;
+            background-color: #a8a4a4;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
+            animation-play-state: paused;
+            
+            
+        }
+        #buttons button:hover {
+            
+            animation: trembling 0.6s linear infinite;
+        }
+        @keyframes trembling {
+            0% { transform: translateX(0); }
+            10% { transform: translateX(-2px) rotate(-1deg); }
+            20% { transform: translateX(2px) rotate(1deg); }
+            30% { transform: translateX(-2px) rotate(-1deg); }
+            40% { transform: translateX(2px) rotate(1deg); }
+            50% { transform: translateX(-2px) rotate(-1deg); }
+            60% { transform: translateX(2px) rotate(1deg); }
+            70% { transform: translateX(-2px) rotate(-1deg); }
+            80% { transform: translateX(2px) rotate(1deg); }
+            90% { transform: translateX(-2px) rotate(-1deg); }
+            100% { transform: translateX(0); }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="quiz"></div>
+
+    <script>
+        const quizDiv = document.getElementById('quiz');
+        let quizData;
+
+        async function fetchQuizData() {
+            const response = await fetch('quiz.json');
+            const data = await response.json();
+            quizData = data;
+            processQuizData(data);
+
+            if (localStorage.getItem('resultsShown') === 'true') {
+                showResults();
+                document.getElementById('showResults').disabled = true;
+            }
+        }
+
+        function processQuizData(data) {
+            let html = '';
+            Object.values(data.quiz).forEach((questionData, index) => {
+                html += `<h2>Question ${index + 1}: ${questionData.question}</h2>`;
+                questionData.options.forEach((option, optionIndex) => {
+                    const isChecked = localStorage.getItem(`q${index}`) === option;
+                    html += `<input type="radio" id="q${index}o${optionIndex}" name="q${index}" value="${option}" ${isChecked ? 'checked' : ''}>
+                    <label for="q${index}o${optionIndex}">${option}</label><br>`;
+                });
+            });
+
+            html += `<div id="buttons">
+                        <button id="showResults">Show Results</button>
+                        <button id="resetQuiz">Reset Quiz</button>
+                    </div>`;
+            quizDiv.innerHTML = html;
+            const inputs = quizDiv.getElementsByTagName('input');
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].addEventListener('change', function (e) {
+                    localStorage.setItem(e.target.name, e.target.value);
+                });
+            }
+
+            document.getElementById('showResults').addEventListener('click', showResults);
+            document.getElementById('resetQuiz').addEventListener('click', resetQuiz);
+        }
+
+        function showResults() {
+            for (let i = 0; i < Object.keys(quizData.quiz).length; i++) {
+                if (localStorage.getItem(`q${i}`) === null) {
+                    alert('Please answer all questions first');
+                    return;
+                }
+            }
+
+            const inputs = quizDiv.getElementsByTagName('input');
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].disabled = true;
+            }
+
+            Object.values(quizData.quiz).forEach((questionData, index) => {
+                const userAnswer = localStorage.getItem(`q${index}`);
+                const correctAnswer = questionData.answer;
+                const inputs = quizDiv.querySelectorAll(`input[name="q${index}"]`);
+                inputs.forEach(input => {
+                    if (input.value === userAnswer && userAnswer !== correctAnswer) {
+                        input.nextElementSibling.style.color = 'red';
+                    }
+                    if (input.value === correctAnswer) {
+                        input.nextElementSibling.style.color = 'green';
+                    }
+                });
+            });
+
+            document.getElementById('showResults').disabled = true;
+            localStorage.setItem('resultsShown', 'true');
+        }
+        function resetQuiz() {
+            for (let i = 0; i < Object.keys(quizData.quiz).length; i++) {
+                localStorage.removeItem(`q${i}`);
+            }
+
+            localStorage.removeItem('resultsShown');
+
+            const inputs = quizDiv.getElementsByTagName('input');
+            for (let i = 0; i < inputs.length; i++) {
+                inputs[i].checked = false;
+                inputs[i].nextElementSibling.style.color = '';
+                inputs[i].disabled = false;
+            }
+
+            document.getElementById('showResults').disabled = false;
+        }
+
+        fetchQuizData();
+    </script>
+</body>
+
+</html>
