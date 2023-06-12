@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let xhr = new XMLHttpRequest();
+        //inicijalizacija zahtjeva i prosliejdjuju se sljedeci parametri
+        xhr.open("GET", "countries.json");  //otvaranje konekcije inicijalizacija takoreci
+        xhr.send();   //1 parametar-tijelo zahtjeva-----metoda slanja
+        xhr.responseType = "json";  //ovo ako ne ukucamo na onloadu response ce biti obican text a na ovaj nacin json fajl koji ce se dalje parsirati
+        xhr.onload = function () {
+            //console.log('Response loaded: ' + xhr.response);  ovo smo zakomentirali i moramo napraviti logiku za response
+            let countries = xhr.response;
+            for (let i = 0; i < countries.length; i++) {
+                document.body.innerHTML += '<h2>' + countries[i].name + '</h2>';
+                document.body.innerHTML += '<p>Country code: ' + countries[i].countryCode + '</p>';
+                document.body.innerHTML += '<p>Capital: ' + countries[i].capital + '</p>';
+                document.body.innerHTML += '<p>Description: ' + countries[i].description + '</p>';
+            }
+        };
+        xhr.onerror = function () {
+            console.log('Network Error');
+        };
+        xhr.onprogress = function (event) {
+            console.log('Received ' + event.loaded + ' of ' + event.total);
+        };
+
+
+    </script>
+</body>
+
+</html>

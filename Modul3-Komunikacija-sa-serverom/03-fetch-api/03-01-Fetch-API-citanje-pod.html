@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX</title>
+</head>
+
+<body>
+    <script>
+        fetch('countries.json').then(function (response) {
+            if (!response.ok) {        //! provjera da li je response ok, ako nije izbacit ce ispod error
+                throw Error("Error while reading file.");
+            }
+            return response.json();
+            
+        }).then(function (countries) {
+            for (let i = 0; i < countries.length; i++) {
+                document.body.innerHTML+= '<h2>' + countries[i].name + '</h2>';
+                document.body.innerHTML+= '<p>Country code: ' + countries[i].countryCode + '</p>';
+                document.body.innerHTML+= '<p>Capital: '+ countries[i].capital + '</p>';
+                document.body.innerHTML+= '<p>Description: '+ countries[i].description + '</p>';
+            }
+        }).catch(function (err) {     ///samo ako browser ne moze serveru poslati
+            console.log('Fetch problem: ' + err.message);
+        });
+    </script>
+</body>
+
+</html>
