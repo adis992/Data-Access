@@ -29,7 +29,7 @@
             justify-content: space-between;
             width: 40%;
             margin: 20px auto;
-            
+
         }
 
         #buttons button {
@@ -39,25 +39,59 @@
             background-color: #a8a4a4;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
             animation-play-state: paused;
-            
-            
+
+
         }
+
         #buttons button:hover {
-            
+
             animation: trembling 0.6s linear infinite;
         }
+
         @keyframes trembling {
-            0% { transform: translateX(0); }
-            10% { transform: translateX(-2px) rotate(-1deg); }
-            20% { transform: translateX(2px) rotate(1deg); }
-            30% { transform: translateX(-2px) rotate(-1deg); }
-            40% { transform: translateX(2px) rotate(1deg); }
-            50% { transform: translateX(-2px) rotate(-1deg); }
-            60% { transform: translateX(2px) rotate(1deg); }
-            70% { transform: translateX(-2px) rotate(-1deg); }
-            80% { transform: translateX(2px) rotate(1deg); }
-            90% { transform: translateX(-2px) rotate(-1deg); }
-            100% { transform: translateX(0); }
+            0% {
+                transform: translateX(0);
+            }
+
+            10% {
+                transform: translateX(-2px) rotate(-1deg);
+            }
+
+            20% {
+                transform: translateX(2px) rotate(1deg);
+            }
+
+            30% {
+                transform: translateX(-2px) rotate(-1deg);
+            }
+
+            40% {
+                transform: translateX(2px) rotate(1deg);
+            }
+
+            50% {
+                transform: translateX(-2px) rotate(-1deg);
+            }
+
+            60% {
+                transform: translateX(2px) rotate(1deg);
+            }
+
+            70% {
+                transform: translateX(-2px) rotate(-1deg);
+            }
+
+            80% {
+                transform: translateX(2px) rotate(1deg);
+            }
+
+            90% {
+                transform: translateX(-2px) rotate(-1deg);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
         }
     </style>
 </head>
@@ -69,7 +103,7 @@
         const quizDiv = document.getElementById('quiz');
         let quizData;
 
-        async function fetchQuizData() {
+        async function fetchQuizData() {  // async funkcija koja ceka da se izvrsi fetch i onda nastavlja dalje sa izvrsavanjem koda
             const response = await fetch('quiz.json');
             const data = await response.json();
             quizData = data;
@@ -81,33 +115,39 @@
             }
         }
 
-        function processQuizData(data) {
+        function processQuizData(data) { // funkcija koja obradjuje podatke iz json fajla i prikazuje ih na stranici
             let html = '';
-            Object.values(data.quiz).forEach((questionData, index) => {
-                html += `<h2>Question ${index + 1}: ${questionData.question}</h2>`;
+            Object.values(data.quiz).forEach((questionData, index) => { //for each petlja koja prolazi kroz svaki element niza i vraca njegovu vrednost
+                html += `<h2>Question ${index + 1}: ${questionData.question}</h2>`; // index + 1 jer krece od 0 a ne od 1
                 questionData.options.forEach((option, optionIndex) => {
-                    const isChecked = localStorage.getItem(`q${index}`) === option;
-                    html += `<input type="radio" id="q${index}o${optionIndex}" name="q${index}" value="${option}" ${isChecked ? 'checked' : ''}>
-                    <label for="q${index}o${optionIndex}">${option}</label><br>`;
+                    const isChecked = localStorage.getItem(`q${index}`) === option; // proverava da li je nesto cekirano a q${index} je ime inputa
+                    html += `<input type="radio" id="q${index}o${optionIndex}" name="q${index}" value="${option}" ${isChecked ? 'checked' : ''}><label for="q${index}o${optionIndex}">${option}</label><br>`;
                 });
             });
 
-            html += `<div id="buttons">
+
+            //dodavanje button-a kroz js a ne html stukturu
+            html += `<div id="buttons">          
                         <button id="showResults">Show Results</button>
                         <button id="resetQuiz">Reset Quiz</button>
                     </div>`;
             quizDiv.innerHTML = html;
-            const inputs = quizDiv.getElementsByTagName('input');
-            for (let i = 0; i < inputs.length; i++) {
+
+            const inputs = quizDiv.getElementsByTagName('input'); // vraca niz svih inputa
+
+            for (let i = 0; i < inputs.length; i++) { // prolazi kroz sve inpute i dodaje event listener na svaki
                 inputs[i].addEventListener('change', function (e) {
                     localStorage.setItem(e.target.name, e.target.value);
                 });
             }
 
-            document.getElementById('showResults').addEventListener('click', showResults);
-            document.getElementById('resetQuiz').addEventListener('click', resetQuiz);
+            document.getElementById('showResults').addEventListener('click', showResults); // dodavanje event listener-a na button
+            document.getElementById('resetQuiz').addEventListener('click', resetQuiz);      // dodavanje event listener-a na button
         }
 
+
+
+        //funkcije za prikaz rezultata
         function showResults() {
             for (let i = 0; i < Object.keys(quizData.quiz).length; i++) {
                 if (localStorage.getItem(`q${i}`) === null) {
@@ -116,12 +156,12 @@
                 }
             }
 
-            const inputs = quizDiv.getElementsByTagName('input');
-            for (let i = 0; i < inputs.length; i++) {
-                inputs[i].disabled = true;
+            const inputs = quizDiv.getElementsByTagName('input'); // vraca niz svih inputa
+            for (let i = 0; i < inputs.length; i++) { // prolazi kroz sve inpute i dodaje event listener na svaki
+                inputs[i].disabled = true; // onemogucava da se ponovo cekira
             }
 
-            Object.values(quizData.quiz).forEach((questionData, index) => {
+            Object.values(quizData.quiz).forEach((questionData, index) => { //ovo je isto kao i u procesQuizData
                 const userAnswer = localStorage.getItem(`q${index}`);
                 const correctAnswer = questionData.answer;
                 const inputs = quizDiv.querySelectorAll(`input[name="q${index}"]`);
@@ -138,6 +178,9 @@
             document.getElementById('showResults').disabled = true;
             localStorage.setItem('resultsShown', 'true');
         }
+
+
+        //funkcija za resetovanje kviza
         function resetQuiz() {
             for (let i = 0; i < Object.keys(quizData.quiz).length; i++) {
                 localStorage.removeItem(`q${i}`);
@@ -155,7 +198,7 @@
             document.getElementById('showResults').disabled = false;
         }
 
-        fetchQuizData();
+        fetchQuizData();  // pozivanje funkcije
     </script>
 </body>
 

@@ -1,15 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cockies</title>
+    </head>
 
-<body>
+    <body>
+        <script>
+            document.cookie = "lang=en; max-age=7200;"  //ovo aktivira novi kokis sa setovanom vrijednoscu koju smo mi definisali ovdje
+            //max-age je vrijeme trajanja kokisa u sekundama
+            //ako bi vrijeme expires stavili 1970 iz proslosti onda bi se kokis odmah obrisao automatski nakon refresha
 
-</body>
+
+
+
+
+
+
+            //unutar cockies-a moze da se sacuva jezicko podesevanje
+            //mogu se kreirati i na serveru sto je i cesce i na klijentu
+            //obavezni su naziv i vrijednost, ostalo je opcionalno za kokije inace se sve naziva direktiva
+            //logika za citanje svih kokija
+
+            console.log(document.cookie);
+
+            
+        </script>
+
+    </body>
 
 </html>

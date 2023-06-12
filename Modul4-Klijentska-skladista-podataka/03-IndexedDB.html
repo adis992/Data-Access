@@ -9,6 +9,225 @@
 </head>
 
 <body>
+    <script>
+        var db;
+        var request = window.indexedDB.open("MyTestDatabase", 2); //ovo je kreiranje indexedDB baze podataka, prvi parametar je naziv baze podataka, a drugi parametar je verzija baze podataka
+        //indexedDB je objekat koji se nalazi u window objektu
+        //prvo se kreira struktura baze podataka, a zatim se kreira baza podataka
+
+        request.onupgradeneeded = function (event) {  //sema baze podataka se kreira u ovom event handleru
+
+            /*
+                        db = event.target.result; //ovo je referenca na bazu podataka, dobijanje objekta baze podataka i ovaj nacin je najbolji nacin za dobijanje objekta baze podataka
+                        var objectStore = db.createObjectStore("students", { keyPath: "usi" });//kreiranje objekta za skladištenje podataka
+                        //prvi parametar je naziv objekta za skladištenje podataka, a drugi parametar je opcioni parametar i predstavlja objekat koji sadrži opcije za skladištenje podataka
+                        //keyPath je opcioni parametar i predstavlja naziv polja koje će biti ključ za skladištenje podataka
+                        //usi je jedinstveni studentski identifikacioni broj u unix formatu i on je ključ za skladištenje podataka
+            */
+            db = event.target.result;
+            var transaction = event.target.transaction;
+
+            if (!db.objectStoreNames.contains("students")) {  //provjera da li postoji objekat za skladištenje podataka ako postoji preskoci ako ne postoji  uradi too
+                var objectStore = db.createObjectStore("students", { keyPath: "usi" });
+            }
+
+            transaction.objectStore("students").createIndex("name_idx", "name");   //kreiranje indeksa za objekat za skladištenje podataka
+
+
+
+
+        };
+
+
+
+
+
+
+
+
+        request.onsuccess = function (event) {
+            //ovo je event handler koji se poziva kada se baza podataka uspesno kreira ili kada se promeni verzija baze podataka
+            db = event.target.result; //ovo je referenca na bazu podataka, dobijanje objekta baze podataka i ovaj nacin je najbolji nacin za dobijanje objekta baze podataka
+            //sve se obavlja kroz transakcije
+
+
+
+            //INSERT METODA
+            /*
+            var transaction = db.transaction("students", "readwrite");
+            var studentsObjestStore = transaction.objectStore("students"); //ovo je referenca na objekat za skladištenje podataka
+            let student = {
+                usi: "sad3rr3",
+                name: "Pera Peric",
+                email: "email@mysite.com",
+                age: 25
+            };
+            let request = studentsObjestStore.add(student); //dodavanje podataka u objekat za skladištenje podataka
+            request.onsuccess = function () {
+                //ovo je event handler koji se poziva kada se podaci uspesno dodaju u objekat za skladištenje podataka
+                console.log("Podaci su uspesno dodati u objekat za skladištenje podataka", request.result);
+            };
+            request.onerror = function () {
+                //ovo je event handler koji se poziva kada se podaci ne uspesno dodaju u objekat za skladištenje podataka
+                console.log("Error", request.error);
+            };
+            */
+
+
+
+            //BRISANJE PODATAKA IZ OBJEKTA ZA SKLADIŠTENJE PODATAKA
+            //DELETE METODA
+            /*
+            var transaction = db.transaction("students", "readwrite");
+            var studentsObjestStore = transaction.objectStore("students"); //ovo je referenca na objekat za skladištenje podataka
+            var request = studentsObjestStore.delete("sad3rr3"); //brisanje podataka iz objekta za skladištenje podataka
+            request.onsuccess = function () {
+                //ovo je event handler koji se poziva kada se podaci uspesno izbrisu iz objekta za skladištenje podataka
+                console.log("Podaci su uspesno izbrisani iz objekta za skladištenje podataka", request.result);
+            };
+            request.onerror = function () {
+                //ovo je event handler koji se poziva kada se podaci ne uspesno izbrisu iz objekta za skladištenje podataka
+                console.log("Error", request.error);
+            };
+            */
+
+
+
+            //CITANJE PODATAKA
+            /*
+            db.transaction("students").objectStore("students").get("sad3rr3").onsuccess = function (event) {
+                //ovo je event handler koji se poziva kada se podaci uspesno procitaju iz objekta za skladištenje podataka
+                let studentObj = event.target.result;
+                console.log(studentObj.usi);
+                console.log(studentObj.name);
+                console.log(studentObj.email);
+                console.log(studentObj.age);
+            };
+            */
+
+            //UPDATE METODA ako zelimo izmijenizti recimo u narednom primjeru broj godina na 25
+            //read and update
+
+            /*
+            var studentsObjestStore = db.transaction("students", "readwrite").objectStore("students"); //ovo je referenca na objekat za skladištenje podataka
+    
+            studentsObjestStore.get("sad3rr3").onsuccess = function (event) {
+                //ovo je event handler koji se poziva kada se podaci uspesno procitaju iz objekta za skladištenje podataka
+                let studentObj = event.target.result;
+                studentObj.age = 45;
+                var requestUpdate = studentsObjestStore.put(studentObj); //update podataka u objektu za skladištenje podataka
+                requestUpdate.onsuccess = function () {
+                    //ovo je event handler koji se poziva kada se podaci uspesno izmijene u objekat za skladištenje podataka
+                    console.log("Podaci su uspesno izmijenjeni", requestUpdate.result);
+                };
+                requestUpdate.onerror = function () {
+                    //ovo je event handler koji se poziva kada se podaci ne uspesno izmijene u objekat za skladištenje podataka
+                    console.log("Error", requestUpdate.error);
+                };
+            };
+            */
+
+
+
+            ///CITANJE VECE KOLICINE PODATAKA IZ DB
+            /*
+                        let students = [{
+                            usi: "sad3rr5",
+                            name: "ruta rutic",
+                            email: "email@emi.com",
+                            age: 22
+                        },
+                        {
+                            usi: "sad3rr4",
+                            name: "Mika Mikiccc",
+                            email: "dsdasdas@sdasd.com",
+                            age: 23
+                        },]
+            
+                        var studentsObjestStore = db.transaction("students", "readwrite").objectStore("students");
+            
+            
+                        students.forEach(function (student) {
+                            let request = studentsObjestStore.add(student); //dodavanje podataka u objekat za skladištenje podataka
+            
+                            request.onsuccess = function () {
+                                //ovo je event handler koji se poziva kada se podaci uspesno dodaju u objekat za skladištenje podataka
+                                console.log("Podaci su uspesno dodati ", request.result);
+                            };
+                            request.onerror = function () {
+                                //ovo je event handler koji se poziva kada se podaci ne uspesno dodaju u objekat za skladištenje podataka
+                                console.log("Error", request.error);
+                            };
+                        });
+            */
+
+            //PRIMJER IZNAD JE BIO ZADNJI I TU U LOCAL JE SPREMLJENO 3 STUDENTA I SADA CEMO IH ISPISATI UKONZOLI TJ PROCITATI IZ DB
+            //OVO JE ZNACI CITANJE SVE ODJEDNOM
+
+            /*
+                        var studentsObjestStore = db.transaction("students").objectStore("students");
+                        //ovo je event handler koji se poziva kada se podaci uspesno procitaju iz objekta za skladištenje podataka
+                        studentsObjestStore.getAll().onsuccess = function (event) {
+                            let studentsObj = event.target.result;
+            
+                            studentsObj.forEach(function (studentsObj) {
+                                console.log("--------------------USER IZ BAZE-----------------------------");
+                                console.log("usi: " + studentsObj.usi);
+                                console.log("name: " + studentsObj.name);
+                                console.log("email: " + studentsObj.email);
+                                console.log("Age: " + studentsObj.age);
+            
+                            });
+                        };
+            
+            */
+
+            /*
+            //UKOLIKO JE BAZA PREVELIKA ONDA IDEMO ZAPIS PO ZAPIS IZ BAZE CITATI I PRIMJER IDE OVAKO I ZA TO JE POTREBNO KORISTITI CURSOR
+                        var studentsObjectStore = db.transaction("students").objectStore("students");
+                        //ovo je event handler koji se poziva kada se podaci uspesno procitaju iz objekta za skladištenje podataka
+                        studentsObjectStore.openCursor().onsuccess = function (event) {
+                            var cursor = event.target.result;
+            
+                            if (cursor) {
+                                let studentObj = cursor.value;
+                                console.log("--------------------USER IZ BAZE-----------------------------");
+                                console.log("usi: " + studentObj.usi);
+                                console.log("name: " + studentObj.name);
+                                console.log("email: " + studentObj.email);
+                                console.log("Age: " + studentObj.age);
+                                cursor.continue();
+                            };
+                        };
+            
+                        //ovakvo citanje je znatno efikasnije jer se cita red po red a ne sve odjednom
+            */
+
+
+
+            //kada smo izmijenilistrukturu baze i verzijen a 2 i dodali index na name sada mozemo pretrazivati i po indexima a ne samo po kljucu
+            //PRIMJER PRETRAZIVANJA PO INDEXU   
+
+            var studentsObjectStore = db.transaction("students").objectStore("students");
+
+            var index = studentsObjectStore.index("name_idx"); //ovo je referenca na index
+
+            index.get("Mika Mikiccc").onsuccess = function (event) {
+                console.log("Mika Mikiccc USI is: " + event.target.result.usi);
+            };
+
+
+
+        };
+
+
+        request.onerror = function (event) {
+            //ovo je event handler koji se poziva kada se baza podataka ne uspesno kreira ili kada se promeni verzija baze podataka
+            console.error("Error" + event.target.error);
+
+        };
+
+    </script>
 
 </body>
 

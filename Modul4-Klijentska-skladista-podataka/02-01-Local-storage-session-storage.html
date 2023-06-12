@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Storage API</title>
+    </head>
+
+    <body>
+        <script>
+            //local i session storage su objekti koji se nalaze u window objektu i oni su namijenjeni za cuvanje podataka na klijentskoj strani, a ne na serveru i to je razlika izmedju kokisa i ovih objekata
+            //session storage je vezan za jednu sesiju i on se brise nakon zatvaranja browsera
+            //local storage se ne brise nakon zatvaranja browsera nego ostaje sacuvan i nakon zatvaranja browsera i nakon restarta racunara ali se brise nakon brisanja istorije browsera
+            sessionStorage.setItem("myDog", "Lisa"); //ovo je setovanje vrijednosti u session storage
+
+            localStorage.setItem("myCat", "Tom"); //ovo je setovanje vrijednosti u local storage
+
+
+            //citanje podataka iz storage
+            console.log(sessionStorage.getItem("myDog")); //ovo je citanje vrijednosti iz session storage isto je i za local storage
+
+
+            //oni cuvaju podatke u string formatu na primjer localStorage.setItem("myCat", "Tom"); ovdje je Tom string
+            //brisanje podataka iz storage  localStorage.removeItem("myCat"); ovo je brisanje podataka iz local storage
+
+        
+
+            //PROLAZAK KROZ STORAGE SA FOR I FOR OF PETLJOM
+
+            //for petlja koja prolazi kroz sve kljuceve u local storage
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                console.log(key + ":" + localStorage.getItem(key));
+            }
+
+            //for of petlja
+
+            for (let key of localStorage) {  //ovo je for of petlja koja prolazi kroz sve kljuceve u local storage
+                console.log(key + ":" + localStorage.getItem(key));
+            }
+
+        </script>
+    </body>
+
+</html>
